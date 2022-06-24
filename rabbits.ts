@@ -20,7 +20,7 @@ class population {
 	months: number = 0;
 
 	maleRabbits: number;
-	childFemaleRabbits: number;
+	childFemaleRabbits: Array<number> = [];
 	fertileFemaleRabbits: number;
 	rabbitsNeededAlive: number;
 
@@ -36,7 +36,16 @@ class population {
 	}
 
 	femaleRabbitTotal(): number {
-		return this.fertileFemaleRabbits + this.childFemaleRabbits;
+		return this.fertileFemaleRabbits + this.childFemaleRabbitTotal();
+	}
+
+	childFemaleRabbitTotal() {
+		let sum = 0;
+
+		for (let i = 0; i < this.childFemaleRabbits.length; i++)
+			sum += this.childFemaleRabbits[i];
+
+		return sum;
 	}
 
 	populationGrowth() {
@@ -48,8 +57,14 @@ class population {
 			this.fertileFemaleRabbits > 0 &&
 			this.maleRabbits > 0
 		) {
-			this.childFemaleRabbits = 9 * this.fertileFemaleRabbits;
+			this.childFemaleRabbits.push(9 * this.fertileFemaleRabbits);
 			this.maleRabbits += 5 * this.maleRabbits;
+			if (this.childFemaleRabbits.length > 2) {
+				let maturedFemales: number = Number(
+					this.childFemaleRabbits.shift()
+				);
+				this.fertileFemaleRabbits += maturedFemales;
+			}
 		}
 	}
 }
