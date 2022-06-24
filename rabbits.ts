@@ -17,7 +17,6 @@ class rabbit {
 
 class population {
 	maleRabbitTotal: number;
-	femaleRabbitTotal: number;
 	months: number = 0;
 
 	maleRabbits: number;
@@ -33,11 +32,11 @@ class population {
 	}
 
 	rabbitTotal(): number {
-		return (
-			this.maleRabbits +
-			this.fertileFemaleRabbits +
-			this.childFemaleRabbits
-		);
+		return this.maleRabbits + this.femaleRabbitTotal();
+	}
+
+	femaleRabbitTotal(): number {
+		return this.fertileFemaleRabbits + this.childFemaleRabbits;
 	}
 
 	populationGrowth() {
