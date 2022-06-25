@@ -1,71 +1,78 @@
-enum rabbitGender {
+enum RabbitGender {
 	Male,
 	Female,
 }
-enum rabbitState {
+enum RabbitState {
 	Alive,
+	Mature,
 	Deceased,
 }
 
-class rabbit {
+class Rabbit {
 	age: number;
-	gender: rabbitGender;
-	state: rabbitState;
+	gender: RabbitGender;
+	state: RabbitState;
 
 	constructor() {}
 }
 
-class population {
-	maleRabbitTotal: number;
-	months: number = 0;
+class Population {
+	rabbitPopulation: Array<Generation>;
+	popTotal: number;
+	popGoal: number;
 
-	maleRabbits: number;
-	childFemaleRabbits: Array<number> = [];
-	fertileFemaleRabbits: number;
-	rabbitsNeededAlive: number;
+	constructor (startingMales: number, startingFemales: number, popTotalGoal: number) {
+		let startingGeneration = new Generation(startingMales, startingFemales);
+		this.rabbitPopulation.push(startingGeneration)
 
-	constructor(males: number, females: number, popSize: number) {
-		this.maleRabbits = males;
-		this.fertileFemaleRabbits = females;
-		this.rabbitsNeededAlive = popSize;
-		this.rabbitTotal();
+		this.popGoal = popTotalGoal;
 	}
 
-	rabbitTotal(): number {
-		return this.maleRabbits + this.femaleRabbitTotal();
+	generationProduce() {
+		let nextGenerationMales: number = 0;
+		let nextGenerationFemales: number = 0 ;
+
+		this.rabbitPopulation.forEach((singleGeneration: Generation) => {
+			let [newMales, newFemales]: number[] = singleGeneration.breed();
+
+			nextGenerationMales += newMales;
+			nextGenerationFemales += newFemales;
+		});
+
+		let latestGeneration: Generation = new Generation(nextGenerationMales, nextGenerationFemales);
+		this.rabbitPopulation.push(latestGeneration);
+
+		this.generationExpiration();
 	}
 
-	femaleRabbitTotal(): number {
-		return this.fertileFemaleRabbits + this.childFemaleRabbitTotal();
-	}
-
-	childFemaleRabbitTotal() {
-		let sum = 0;
-
-		for (let i = 0; i < this.childFemaleRabbits.length; i++)
-			sum += this.childFemaleRabbits[i];
-
-		return sum;
-	}
-
-	populationGrowth() {
-		this.rabbitTotal();
-		let desiredPopSize = this.rabbitsNeededAlive;
-
-		if (
-			this.rabbitTotal() < desiredPopSize &&
-			this.fertileFemaleRabbits > 0 &&
-			this.maleRabbits > 0
-		) {
-			this.childFemaleRabbits.push(9 * this.fertileFemaleRabbits);
-			this.maleRabbits += 5 * this.maleRabbits;
-			if (this.childFemaleRabbits.length > 2) {
-				let maturedFemales: number = Number(
-					this.childFemaleRabbits.shift()
-				);
-				this.fertileFemaleRabbits += maturedFemales;
+	generationExpiration() {
+		this.rabbitPopulation.forEach((singleGeneration, index) => {
+			if(singleGeneration.age > 96) {
+				this.rabbitPopulation.splice(index, 1);
 			}
-		}
+		});
+	}
+	
+}
+
+class Generation {
+	matureMales: number
+	matureFemales: number
+
+	age: number = 0;
+
+	constructor(males: number, females: number) {
+		this.matureMales = males;
+		this.matureFemales = females;
+	}
+
+	breed() {
+		let newMales: number = this.matureFemales * 5;
+		let newFemales: number = this.matureFemales * 9;
+
+		this.age ++;
+
+		return [newMales, newFemales];
 	}
 }
 
