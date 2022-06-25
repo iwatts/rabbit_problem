@@ -21,7 +21,7 @@ class Population {
 	popTotal: number;
 	popGoal: number;
 
-	constructor (startingMales, startingFemales, popTotalGoal) {
+	constructor (startingMales: number, startingFemales: number, popTotalGoal: number) {
 		let startingGeneration = new Generation(startingMales, startingFemales);
 		this.rabbitPopulation.push(startingGeneration)
 
@@ -32,8 +32,8 @@ class Population {
 		let nextGenerationMales: number = 0;
 		let nextGenerationFemales: number = 0 ;
 
-		this.rabbitPopulation.forEach((singleGeneration, index) => {
-			let [newMales, newFemales] = singleGeneration.breed();
+		this.rabbitPopulation.forEach((singleGeneration: Generation) => {
+			let [newMales, newFemales]: number[] = singleGeneration.breed();
 
 			nextGenerationMales += newMales;
 			nextGenerationFemales += newFemales;
