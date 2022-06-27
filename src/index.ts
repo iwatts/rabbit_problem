@@ -1,2 +1,4 @@
-export * from "./rabbits";
 import "bootstrap";
+import "./scss/main.scss";
+
+export * from "./rabbits";
