@@ -16,21 +16,25 @@ class Rabbit {
 	constructor() {}
 }
 
-class Population {
+export class Population {
 	rabbitPopulation: Array<Generation>;
 	popTotal: number;
 	popGoal: number;
 
-	constructor (startingMales: number, startingFemales: number, popTotalGoal: number) {
+	constructor(
+		startingMales: number,
+		startingFemales: number,
+		popTotalGoal: number
+	) {
 		let startingGeneration = new Generation(startingMales, startingFemales);
-		this.rabbitPopulation.push(startingGeneration)
+		this.rabbitPopulation.push(startingGeneration);
 
 		this.popGoal = popTotalGoal;
 	}
 
 	generationProduce() {
 		let nextGenerationMales: number = 0;
-		let nextGenerationFemales: number = 0 ;
+		let nextGenerationFemales: number = 0;
 
 		this.rabbitPopulation.forEach((singleGeneration: Generation) => {
 			let [newMales, newFemales]: number[] = singleGeneration.breed();
@@ -39,7 +43,10 @@ class Population {
 			nextGenerationFemales += newFemales;
 		});
 
-		let latestGeneration: Generation = new Generation(nextGenerationMales, nextGenerationFemales);
+		let latestGeneration: Generation = new Generation(
+			nextGenerationMales,
+			nextGenerationFemales
+		);
 		this.rabbitPopulation.push(latestGeneration);
 
 		this.generationExpiration();
@@ -47,17 +54,16 @@ class Population {
 
 	generationExpiration() {
 		this.rabbitPopulation.forEach((singleGeneration, index) => {
-			if(singleGeneration.age > 96) {
+			if (singleGeneration.age > 96) {
 				this.rabbitPopulation.splice(index, 1);
 			}
 		});
 	}
-	
 }
 
-class Generation {
-	matureMales: number
-	matureFemales: number
+export class Generation {
+	matureMales: number;
+	matureFemales: number;
 
 	age: number = 0;
 
@@ -70,7 +76,7 @@ class Generation {
 		let newMales: number = this.matureFemales * 5;
 		let newFemales: number = this.matureFemales * 9;
 
-		this.age ++;
+		this.age++;
 
 		return [newMales, newFemales];
 	}
